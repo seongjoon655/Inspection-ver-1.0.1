@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+     <script type="text/javascript" src="script.js" ></script>
+    <script>
+    /*
+      $(document).ready(function(){
+        $(".login_btn").click(()=>{
+            var sel = $('#slct1')[0];
+            var uid = sel.options[sel.selectedIndex].value;
+            alert(uid);
+            var pass = $("#pass").val();
+            $.ajax({
+              url:'/login/'+uid,
+              dataType:'json',
+              data : {pw:pass},
+              success:function(data){
+                console.log(data);
+              },
+              err:function(request,status,error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+              }
+
+            });
+        });
+      });
+      */
+    </script>
+<%- include('../partials/head') %>
+  </head>
+  <body >
+    <form class="contact-form" action="/" method="post">
+    <div class="container contact contact-index">
+      <h2>Login Page</h2>
+      <ul class="list-group">
+
+          <li class="list-group-item">
+            USER SELECT :
+            <select id="slct1" name="slct1">
+              <option value="none">--</option>
+              <% if(Logindata.recordset.length){
+                    for(var i=0; i<Logindata.recordset.length; i++){
+               %>
+           	      <option value='<%= Logindata.recordset[i].id %>'><%= Logindata.recordset[i].name %></option>
+           	      <%}
+              }%>
+            </select>
+          </li>
+          <li class="list-group-item">
+            PASSWORD :
+            <input type="text" id="pass" name="pass" value="" />
+          </li>
+      </ul>
+      <br />
+      <button type="button" class="login_btn">Login</button>
+    </div>
+  </form>
+
+
+  </body>
+</html>
