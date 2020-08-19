@@ -4,7 +4,8 @@
 }
 
 .contact h2{
-  color: tomato;  
+  color: tomato;
+  font-size: 28pt;
 }
 .contact .contact-form label,
 .contact-show label{

@@ -1,109 +1,618 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!--
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+  -->
+    <script type="text/javascript" src="vendor/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="script.js" ></script>
+    <link rel="stylesheet" href="./jquery-ui-1.12.1/jquery-ui.min.css">
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <script src="./jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+    <script src="./jquery-ui-1.12.1/datepicker-ko.js"></script>
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
     <script>
         $(document).ready(function(){
-            $(".add-row").click(function(){
-                var name = $("#name").val();
-                var email = $("#email").val();
-                //var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + name + "</td><td>" + email + "</td></tr>";
-                //$("table tbody").append(markup);
 
-                //var inputdata = document.forms[0].elements[0].value;
-                // sendAjax 함수를 만들고 URL과 data를 전달
-                //sendAjax('http://localhost:8001/ajax_send_email', inputdata)
-                //submit();
-            });
+          document.getElementById("date1").focus();
 
-            // Find and remove selected table rows
-            $(".delete-row").click(function(){
-                $("table tbody").find('input[name="record"]').each(function(){
-                	if($(this).is(":checked")){
-                        $(this).parents("tr").remove();
-                    }
-                });
-            });
+          //Ctrl + Alt + c 버튼을 눌렀을 때 팝업이 뜨게 만드는 특수 키
+          //shift  16
+          //ctrl   17
+          //alt    18
+          //s      83
+          var isCtrl, isShift;
+          document.onkeyup = function(e){
+            /*if(e.which==17){ isCtrl = false; }
+            if(e.which==18){ isAlt = false; }*/
+            if(e.which==16){ isShift = false; }
+            if(e.which==17){ isCtrl = false; }
+          }
+
+          //(e.which == 67 && isCtrl ==
+          document.onkeydown = function(e){
+            /*if(e.which==17){ isCtrl = true; }
+            if(e.which==18){ isAlt = true; }*/
+            if(e.which==16){ isShift = true; }
+            if(e.which==17){ isCtrl = true; }
+
+            //if(e.which == 67 && isCtrl == true && isAlt == true){
+            if(e.which == 83 && isCtrl == true && isShift == true ){
+              //2020.07.31 수정 필요
+              //현재는 ng 기준으로 활성화를 판단하지만 해당 버튼이 visible 되있는 기준으로 변경되어야 할 듯 하다.
+              //일단 이대로 진행해서 문제 발생시 대응조치 예정
+              if($('#ngMenuButton')[0].disabled){
+                $("#update").trigger("click");
+              }
+              else{
+                $("#save").trigger("click");
+              }
+              //alert('spectial key');
+              return false;
+            }
+          }
+
         });
+
+
     </script>
     <%- include('../partials/head') %>
+    <link rel="stylesheet" href="css/reset.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    .divScrollShow {
+     /*height:300px;overflow-y:scroll;overflow-x:scroll;border-left:1px solid #C7CCD0;border-right:1px solid #C7CCD0;border-top:1px solid #C0C0C0;border-bottom:1px solid #C7CCD0;*/
+     height:300px;overflow-y:scroll;overflow-x:scroll;border-left:0px solid #C7CCD0;border-right:0px solid #C7CCD0;border-top:0px solid #C0C0C0;border-bottom:0px solid #C7CCD0;
+   }
+    .divScrollHidden {
+     /*width:332;overflow-y:hidden;overflow-x:hidden;border-left:1px solid #C7CCD0;border-right:1px solid #C7CCD0;border-top:1px solid #C0C0C0;border-bottom:1px solid #C7CCD0;*/
+     overflow-y:hidden;overflow-x:hidden;border-left:0px solid #C7CCD0;border-right:0px solid #C7CCD0;border-top:0px solid #C0C0C0;border-bottom:0px solid #C7CCD0;
+   }
+   /*
+   .ui-datepicker-calendar > thead tr th.ui-datepicker-week-end:first-child a { color: red; }
+   .ui-datepicker-calendar > thead tr th.ui-datepicker-week-end:last-child a { color: blue; }
+   .ui-datepicker-week-end a {
+          color: red !important;
+   }
+   */
+   .ui-datepicker{ font-size: 17px; width: 400px; }
+   .ui-datepicker select.ui-datepicker-month{ width:80%; height: 80%; font-size: 17px; }
+   .ui-datepicker select.ui-datepicker-year{ width:90%; height: 80%; font-size: 17px; }
+   .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+       border: 1px solid #c5c5c5;
+       font-weight: normal;
+       color: #454545;
+       height: 30px;
+       font-size: large;
+   }
+
+   .ui-datepicker th{
+     color: black !important;
+   }
+
+   .ui-datepicker th.ui-datepicker-week-end:first-child span {
+     color: red !important;
+   }
+
+   .ui-datepicker th.ui-datepicker-week-end:last-child span {
+     color: blue !important;
+   }
+
+   input[type=checkbox] {
+   	display: inline-block;
+   	width: 20px;
+   	height: 20px;
+   	border: 2px solid #bcbcbc;
+   	cursor: pointer;
+    margin-left: 10px;
+   }
+
+   .log-out{
+      font-size: 17px;
+      padding: 5px;
+   }
+
+   .btn-secondary {
+       color: #2f2f2f;
+       background-color: #ffffff;
+       border-color: #767676;
+   }
+
+   .btn-secondary:hover {
+     color: #2f2f2f;
+     background-color: #ffffff;
+     border-color: #767676;
+   }
+
+   .btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+       background-color: #ffffff;
+       background-image: none;
+       border-color: #ffffff;
+       border: none;
+   }
+
+   .btn {
+       display: inline-block;
+       font-weight: 400;
+       text-align: center;
+       white-space: nowrap;
+       vertical-align: middle;
+       -webkit-user-select: none;
+       -moz-user-select: none;
+       -ms-user-select: none;
+       user-select: none;
+       border: 1px solid transparent;
+       padding: .2rem .45rem;
+       font-size: 13px;
+       line-height: 1.25;
+       border-radius: 0rem;
+       transition: all .0s ease-in-out;
+       margin: 0px;
+       /*padding: 5px;*/
+   }
+
+   .btn-secondary.focus, .btn-secondary:focus {
+       outline: -webkit-focus-ring-color auto 1px;
+       box-shadow: 0 0 0 2px rgb(85 89 94);
+   }
+
+   .scrollable-menu {
+       height: auto;
+       max-height: 200px;
+       overflow-x: hidden;
+   }
+
+   .dropdown-menu {
+       position: absolute;
+       top: 100%;
+       left: 0;
+       z-index: 1000;
+       display: none;
+       float: left;
+       min-width: 0rem;
+       padding: .2rem 0;
+       margin: .125rem 0 0;
+       font-size: 1rem;
+       color: #212529;
+       text-align: left;
+       list-style: none;
+       background-color: #fff;
+       background-clip: padding-box;
+       border: 1px solid rgba(0,0,0,.15);
+       border-radius: .25rem;
+   }
+
+   .dropdown-item {
+       display: block;
+       width: 100%;
+       /* padding: .25rem 1.5rem; */
+       clear: both;
+       font-weight: 400;
+       color: #212529;
+       text-align: inherit;
+       white-space: nowrap;
+       background: 0 0;
+       /* border: 0; */
+   }
+
+   .my_dclass {
+       display: block;
+       width: 100%;
+       /* padding: .25rem 1.5rem; */
+       clear: both;
+       font-weight: 400;
+       color: #212529;
+       text-align: inherit;
+       white-space: nowrap;
+       background: 0 0;
+       /* border: 0; */
+       font-size: 19px;
+       padding-left: 30px;
+       padding-right: 30px;
+       padding-top: 20px;
+       padding-bottom: 20px;
+   }
+
+    .dropdown-item:focus, .dropdown-item:hover {
+      color: #e02738;
+      text-decoration: none;
+      background-color: #a9adc5;
+    }
+
+    </style>
   </head>
   <body>
 
 
     <div class="container contact contact-index">
-      <table>
+      <table class="top_table">
         <tr>
           <td><h2>Inspection Page</h2></td>
-          <td>&emsp;&emsp;&emsp;<button type="button" class="log-out">Logout</button></td>
+          <td>&emsp;&emsp;&emsp;<button type="button" class="log-out">&nbsp;로그아웃&nbsp;</button></td>
         </tr>
       </table>
       <ul class="list-group">
-
           <li class="list-group-item">
             USER INFO : [&nbsp;&nbsp;<a href=""> <%=Name.recordset[0].name%> </a>&nbsp;&nbsp;]
+            &emsp;&emsp;&emsp;
+            &emsp;&emsp;&emsp;
+            &emsp;&emsp;&emsp;
+            <a href="javascript:void(0)" onclick="initial_lot(<%=Name.recordset[0].id%>)">LOT정보입력</a>
           </li>
 
       </ul>
     </div>
     <hr />
     &nbsp;&nbsp;
-    LOT 선택 :
-    <select id="slct1" name="slct1"  onChange="onSelectLot(this.id)">
-      <option value="none">--</option>
-      <% if(LOTdata.recordset.length){
-            for(var i=0; i<LOTdata.recordset.length; i++){
-       %>
-   	      <option value='<%= LOTdata.recordset[i].pid %>'><%= LOTdata.recordset[i].lot %></option>
-   	      <%}
-      }%>
-    </select>
+    <span style="color:#e9ecef;"> 날짜 선택 : </span>
+    <input type="text" name="date1" id="date1" size="12" readonly /> <!--autocomplete="off" />-->
     <hr />
-    &nbsp;&nbsp;
-    <tabel>
-      <tr><td>품명 정보 : </td>
-      <td><label id="pumm" name="pumm"></label></td></tr>
+
+    <table id="menu_tb">
+      <tr>
+        <td style="color:#ffffff;border: none;margin: 0px;padding: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;
+          <span style="color:#e9ecef;font-size:12pt;font-weight:400;"> LOT 선택 : </span></td>
+        <td style="color:#ffffff;border: none;margin: 0px;padding: 0px;">
+          <div class="dropdown">
+            &nbsp;&nbsp;
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            --
+          </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <table id="slct_lot">
+                <tr>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
     </table>
 
     <hr />
+    &nbsp;&nbsp;
+    <tabel>
+      <tr>
+      <td><span style="color:#e9ecef;"> 품명 정보 : </span></td>
+      <td><span style="color:#e9ecef;"><label id="pumm" name="pumm"></label></span></td>
+      <td>&emsp;&emsp;&emsp;&emsp;<input type="button" class="save" id="save" value="&nbsp;&nbsp;저&nbsp;장&nbsp;&nbsp;" style="visibility:hidden" /></td>
+      <td>&emsp;&emsp;&emsp;&emsp;<input type="button" class="update" id="update" value="&nbsp;&nbsp;수&nbsp;정&nbsp;&nbsp;" style="visibility:hidden" /></td>
+      </tr>
+    </table>
+
+    <hr />
+    <div id="spec"></div>
     <p>
     <body>
-        <form class="contact-form" action="/" method="post">
-            &nbsp;&nbsp;
-            <input type="text" id="name" name="name" placeholder="Name" value="">
-            <input type="text" id="email" name="email" placeholder="Email Address" value="">
-        	<input type="submit" class="add-row" value="Add Row">
-        </form>
-        <p>
-        <table width="60%" class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-              <%
-              if(! (typeof Jdata === 'undefined')){
-                if(Jdata.recordset.length){
-                  for(var i=0; i<Jdata.recordset.length; i++){
-              %>
-                <tr>
-                    <td><input type="checkbox" name="record"></td>
-                    <td><%= Jdata.recordset[i].id %> </td>
-                    <td><%= Jdata.recordset[i].name %></td>
-                    <td><%= Jdata.recordset[i].mail %></td>
-                </tr>
-                <%}
-                 }
-                 }%>
-            </tbody>
+      <%
+      var ngpx = 220;
+      var howtopx = 120;
+      var inspM = 190;
+      var normalpx = 75;
+      var commentpx = 250;
+      %>
+      <table id="maintb" class="table table-striped table-bordered table-hover">
+    		<tr bgcolor="lightblue">
+    			<td width="<%=ngpx%>px">불량명
+    			</td>
+    			<td width="<%=howtopx%>px">불량수
+    			</td>
+    			<td width="<%=inspM%>px">검사방법
+    			</td>
+    			<td width="<%=howtopx%>px">Lv.
+    			</td>
+    			<td width="<%=howtopx%>px">길이(mm)
+    			</td>
+    		</tr>
+    		<tr>
+    			<td><!--불량명-->
+
+             <div class="dropdown">
+             <button class="btn btn-secondary dropdown-toggle" type="button" id="ngMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value="none">
+             </button>
+               <div class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="ngMenuButton">
+                 <table id="slct_ng">
+                   <tr>
+                   </tr>
+                 </table>
+               </div>
+             </div>
+    			</td>
+    			<td><!--불량수-->
+    			<input type="text" id="ngcnt" value="0" size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    			<td><!--검사방법-->
+
+           <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="howto" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           </button>
+             <div class="dropdown-menu" aria-labelledby="howto">
+               <table id="slct_howto">
+                 <tr>
+                    <td id="slct_howto_0" tabindex="0" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(howto,0,'',true,level)"
+                          onclick=    "dropdownSetting(howto,0,'',false,level)"></td>
+                    <td id="slct_howto_1" tabindex="1" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(howto,1,'반사',true,level)"
+                          onclick=    "dropdownSetting(howto,1,'반사',false,level)">반사</td>
+                    <td id="slct_howto_2" tabindex="2" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(howto,2,'투과cross',true,level)"
+                          onclick=    "dropdownSetting(howto,2,'투과cross',false,level)">투과cross</td>
+                    <td id="slct_howto_3" tabindex="3" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(howto,3,'반사cross',true,level)"
+                          onclick=    "dropdownSetting(howto,3,'반사cross',false,level)">반사cross</td>
+                    <td id="slct_howto_4" tabindex="4" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(howto,4,'투과',true,level)"
+                          onclick=    "dropdownSetting(howto,4,'투과',false,level)">투과</td>
+                 </tr>
+               </table>
+             </div>
+           </div>
+
+    			</td>
+    			<td><!--Lv.-->
+           <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="level" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           </button>
+             <div class="dropdown-menu" aria-labelledby="level">
+               <table id="slct_level">
+                 <tr>
+                    <td id="slct_level_0" tabindex="0" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(level,0,'',true,len)"
+                          onclick=    "dropdownSetting(level,0,'',false,len)"></td>
+                    <td id="slct_level_1" tabindex="1" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(level,1,'Lv 1',true,len)"
+                          onclick=    "dropdownSetting(level,1,'Lv 1',false,len)">Lv 1</td>
+                          <td id="slct_level_2" tabindex="2" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,2,'Lv 2',true,len)"
+                                onclick=    "dropdownSetting(level,2,'Lv 2',false,len)">Lv 2</td>
+                          <td id="slct_level_3" tabindex="3" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,3,'Lv 3',true,len)"
+                                onclick=    "dropdownSetting(level,3,'Lv 3',false,len)">Lv 3</td>
+                          <td id="slct_level_4" tabindex="4" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,4,'Lv 4',true,len)"
+                                onclick=    "dropdownSetting(level,4,'Lv 4',false,len)">Lv 4</td>
+                          <td id="slct_level_5" tabindex="5" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,5,'Lv 5',true,len)"
+                                onclick=    "dropdownSetting(level,5,'Lv 5',false,len)">Lv 5</td>
+                          <td id="slct_level_6" tabindex="6" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,6,'Lv 6',true,len)"
+                                onclick=    "dropdownSetting(level,6,'Lv 6',false,len)">Lv 6</td>
+                          <td id="slct_level_7" tabindex="7" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,7,'Lv 7',true,len)"
+                                onclick=    "dropdownSetting(level,7,'Lv 7',false,len)">Lv 7</td>
+                          <td id="slct_level_8" tabindex="8" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,8,'Lv 8',true,len)"
+                                onclick=    "dropdownSetting(level,8,'Lv 8',false,len)">Lv 8</td>
+                          <td id="slct_level_9" tabindex="9" class="my_dclass dropdown-item"
+                                onkeydown=  "dropdownSetting(level,9,'Lv 9',true,len)"
+                                onclick=    "dropdownSetting(level,9,'Lv 9',false,len)">Lv 9</td>
+               </table>
+             </div>
+           </div>
+
+
+    			</td>
+    			<td><!--길이(mm)-->
+    			<input type="text" id="len" value="0"  size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    		</tr>
+    		<tr bgcolor="lightblue">
+    			<td>사이즈(um)
+    			</td>
+    			<td>판정
+    			</td>
+    			<td>위치기준
+    			</td>
+    			<td>계측기준
+    			</td>
+    			<td>위치(mm)
+    			</td>
+    		</tr>
+    		<tr>
+    			<td><!--사이즈(um)-->
+    			<input type="text" id="size" value="0"  size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    			<td><!--판정-->
+           <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="decision" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           </button>
+             <div class="dropdown-menu" aria-labelledby="decision">
+               <table id="slct_decision">
+                 <tr>
+                    <td id="slct_decision_0" tabindex="0" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(decision,0,'',true,posi_standard)"
+                          onclick=    "dropdownSetting(decision,0,'',false,posi_standard)"></td>
+                    <td id="slct_decision_1" tabindex="1" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(decision,1,'OK',true,posi_standard)"
+                          onclick=    "dropdownSetting(decision,1,'OK',false,posi_standard)">OK</td>
+                    <td id="slct_decision_2" tabindex="2" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(decision,2,'NG',true,posi_standard)"
+                          onclick=    "dropdownSetting(decision,2,'NG',false,posi_standard)">NG</td>
+                    <td id="slct_decision_3" tabindex="3" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(decision,3,'HO',true,posi_standard)"
+                          onclick=    "dropdownSetting(decision,3,'HO',false,posi_standard)">HO</td>
+                    <td id="slct_decision_4" tabindex="4" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(decision,4,'IR',true,posi_standard)"
+                          onclick=    "dropdownSetting(decision,4,'IR',false,posi_standard)">IR</td>
+                 </tr>
+               </table>
+             </div>
+           </div>
+
+
+
+    			</td>
+    			<td><!--위치기준-->
+           <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="posi_standard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           </button>
+             <div class="dropdown-menu" aria-labelledby="posi_standard">
+               <table id="slct_posi_standard">
+                 <tr>
+                    <td id="slct_posi_standard_0" tabindex="0" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(posi_standard,0,'',true,calibration)"
+                          onclick=    "dropdownSetting(posi_standard,0,'',false,calibration)"></td>
+                    <td id="slct_posi_standard_1" tabindex="1" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(posi_standard,1,'左(좌)',true,calibration)"
+                          onclick=    "dropdownSetting(posi_standard,1,'左(좌)',false,calibration)">左(좌)</td>
+                    <td id="slct_posi_standard_2" tabindex="2" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(posi_standard,2,'右(우)',true,calibration)"
+                          onclick=    "dropdownSetting(posi_standard,2,'右(우)',false,calibration)">右(우)</td>
+                 </tr>
+               </table>
+             </div>
+           </div>
+
+
+
+
+
+    			</td>
+    			<td><!--계측기준-->
+            <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="calibration" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </button>
+              <div class="dropdown-menu" aria-labelledby="calibration">
+                <table id="slct_calibration">
+                  <tr>
+                     <td id="slct_calibration_0" tabindex="0" class="my_dclass dropdown-item"
+                           onkeydown=  "dropdownSetting(calibration,0,'',true,pos)"
+                           onclick=    "dropdownSetting(calibration,0,'',false,pos)"></td>
+                     <td id="slct_calibration_1" tabindex="1" class="my_dclass dropdown-item"
+                           onkeydown=  "dropdownSetting(calibration,1,'편광판',true,pos)"
+                           onclick=    "dropdownSetting(calibration,1,'편광판',false,pos)">편광판</td>
+                     <td id="slct_calibration_2" tabindex="2" class="my_dclass dropdown-item"
+                           onkeydown=  "dropdownSetting(calibration,2,'필름',true,pos)"
+                           onclick=    "dropdownSetting(calibration,2,'필름',false,pos)">필름</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+
+    			</td>
+    			<td><!--위치(mm)-->
+    			<input type="text" id="pos" value="0"  size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    		</tr>
+    		<tr bgcolor="lightblue">
+    			<td>폭(mm)
+    			</td>
+    			<td>주기
+    			</td>
+    			<td >단위
+    			</td>
+          <td colspan="2">비고
+    			</td>
+    		</tr>
+    		<tr>
+    			<td><!--폭(mm)-->
+    			<input type="text" id="wid" value="0"  size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    			<td><!--주기-->
+    			<input type="text" id="period" value="0"  size="7" onKeydown='javascript:handlerNum(this)'/>
+    			</td>
+    			<td><!--단위-->
+           <div class="dropdown">
+           <button class="btn btn-secondary dropdown-toggle" type="button" id="unit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           </button>
+             <div class="dropdown-menu" aria-labelledby="unit">
+               <table id="slct_unit">
+                 <tr>
+                    <td id="slct_unit_0" tabindex="0" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(unit,0,'',true,comment)"
+                          onclick=    "dropdownSetting(unit,0,'',false,comment)"></td>
+                    <td id="slct_unit_1" tabindex="1" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(unit,1,'발생수/검사m수',true,comment)"
+                          onclick=    "dropdownSetting(unit,1,'발생수/검사m수',false,comment)">발생수/검사m수</td>
+                    <td id="slct_unit_2" tabindex="2" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(unit,2,'발생수/150mmX150mm',true,comment)"
+                          onclick=    "dropdownSetting(unit,2,'발생수/150mmX150mm',false,comment)">발생수/150mmX150mm</td>
+                    <td id="slct_unit_3" tabindex="3" class="my_dclass dropdown-item"
+                          onkeydown=  "dropdownSetting(unit,3,'레벨',true,comment)"
+                          onclick=    "dropdownSetting(unit,3,'레벨',false,comment)">레벨</td>
+                 </tr>
+               </table>
+             </div>
+           </div>
+
+
+    			</td>
+          <td colspan="2"><!--비고-->
+    			<input type="text" id="comment" value=""  size="27"/>
+    			</td>
+    		</tr>
+    	</table>
+
+
+      <table id="dynamic_input_tb" width="70%" class="table table-striped table-bordered table-hover">
+        <thead id="dynamic_head"></thead>
+        <tbody id="dynamic_body"></tbody>
+      </table>
+
+
+        <hr />
+
+        <!-- dymanic data list table -->
+
+      <!--<div id="divt" style="border: 2px solid rgba(0,0,255); width:1300px; overflow:scroll; overflow-x:auto; overflow-y:auto;">-->
+      <div id=aa class="divScrollHidden ">
+      <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <thead id="dynamic_list_h"></thead>
         </table>
+      </div>
+     </div>
+      <!--<div id="divu" style="border: 2px solid rgba(0,0,255); width:1300px; height:200px; overflow:scroll; overflow-x:auto; overflow-y:auto;">-->
+      <div id=bb class="divScrollShow" onScroll="javascript:document.all.aa.scrollLeft = document.all.bb.scrollLeft">
+      <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+          <tbody id="dynamic_list_b">
+            <!--<tr>
+              <td>AAC</td>
+              <td>AUSTRALIAN COMPANY </td>
+              <td>$1.38</td>
+              <td>+2.01</td>
+              <td>-0.36%</td>
+              <td>AAD</td>
+              <td>AUSENCO</td>
+              <td>$2.38</td>
+              <td>-0.01</td>
+              <td>-1.36%</td>
+              <td>AAX</td>
+              <td>ADELAIDE</td>
+              <td>$3.22</td>
+              <td>+0.01</td>
+              <td>+1.36%</td>
+              <td>XXD</td>
+              <td>ADITYA BIRLA</td>
+              <td>$1.02</td>
+              <td>-1.01</td>
+              <td>+2.36%</td>
+            </tr>-->
+          </tbody>
+        </table>
+      </div>
+      </div>
+      <!-- dymanic data list table -->
+
+        <br />
         &nbsp;&nbsp;
-        <button type="button" class="delete-row">Delete Row</button>
+        <button type="button" class="delete-row">&nbsp;&nbsp;삭&nbsp;제&nbsp;&nbsp;</button>
+        <input id="user_id" type="hidden" value="<%=Name.recordset[0].id%>" />
+        <input id="user_name" type="hidden" value="<%=Name.recordset[0].name%>" />
+        <input id="selbox_record_id" type="hidden" value="" />
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+
 
   </body>
 </html>

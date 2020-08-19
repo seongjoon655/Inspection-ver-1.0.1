@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <script type="text/javascript" src="../vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../initlot.js" ></script>
+    <link rel="stylesheet" href="../jquery-ui-1.12.1/jquery-ui.min.css">
+
+    <script src="../jquery-ui-1.12.1/jquery-ui.min.js"></script>
+
+    <script src="../jquery-ui-1.12.1/datepicker-ko.js"></script>
+    <link rel="icon" type="image/png" href="mages/icons/favicon.ico"/>
+    <script>
+
+
+
+        $(document).ready(function(){
+          SAVE_ENABLE=1;
+          duplstting(true);
+          $(".cancel-check")[0].style.visibility = 'hidden';
+          document.getElementById("lotNM").focus();
+
+          //Ctrl + Alt + c 버튼을 눌렀을 때 팝업이 뜨게 만드는 특수 키
+          //shift  16
+          //ctrl   17
+          //alt    18
+          //s      83
+          var isCtrl, isShift;
+          document.onkeyup = function(e){
+            /*if(e.which==17){ isCtrl = false; }
+            if(e.which==18){ isAlt = false; }*/
+            if(e.which==16){ isShift = false; }
+            if(e.which==17){ isCtrl = false; }
+          }
+
+          //(e.which == 67 && isCtrl ==
+          document.onkeydown = function(e){
+            /*if(e.which==17){ isCtrl = true; }
+            if(e.which==18){ isAlt = true; }*/
+            if(e.which==16){ isShift = true; }
+            if(e.which==17){ isCtrl = true; }
+            //if(e.which == 67 && isCtrl == true && isAlt == true){
+            if(e.which == 83 && isCtrl == true && isShift == true ){
+              $("#save2").trigger("click");
+              //alert('spectial key');
+              return false;
+            }
+          }
+        });
+
+    </script>
+    <%- include('../partials/init_lot_head') %>
+    <link rel="stylesheet" href="../css/reset.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+    .divScrollShow {
+     /*height:300px;overflow-y:scroll;overflow-x:scroll;border-left:1px solid #C7CCD0;border-right:1px solid #C7CCD0;border-top:1px solid #C0C0C0;border-bottom:1px solid #C7CCD0;*/
+     height:300px;overflow-y:scroll;overflow-x:scroll;border-left:0px solid #C7CCD0;border-right:0px solid #C7CCD0;border-top:0px solid #C0C0C0;border-bottom:0px solid #C7CCD0;
+   }
+    .divScrollHidden {
+     /*width:332;overflow-y:hidden;overflow-x:hidden;border-left:1px solid #C7CCD0;border-right:1px solid #C7CCD0;border-top:1px solid #C0C0C0;border-bottom:1px solid #C7CCD0;*/
+     overflow-y:hidden;overflow-x:hidden;border-left:0px solid #C7CCD0;border-right:0px solid #C7CCD0;border-top:0px solid #C0C0C0;border-bottom:0px solid #C7CCD0;
+   }
+   .ui-datepicker{ font-size: 17px; width: 400px; }
+   .ui-datepicker select.ui-datepicker-month{ width:80%; height: 80%; font-size: 17px; }
+   .ui-datepicker select.ui-datepicker-year{ width:90%; height: 80%; font-size: 17px; }
+   .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+       border: 1px solid #c5c5c5;
+       font-weight: normal;
+       color: #454545;
+       height: 30px;
+       font-size: large;
+   }
+
+
+   .ui-datepicker th{
+     color: black !important;
+   }
+
+   .ui-datepicker th.ui-datepicker-week-end:first-child span {
+     color: red !important;
+   }
+
+   .ui-datepicker th.ui-datepicker-week-end:last-child span {
+     color: blue !important;
+   }
+
+   input[type=checkbox] {
+   	display: inline-block;
+   	width: 20px;
+   	height: 20px;
+   	border: 2px solid #bcbcbc;
+   	cursor: pointer;
+    margin-left: 10px;
+   }
+
+   input:disabled {
+       /*background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(59, 59, 59, 0.3));*/
+       /*border-color: rgba(118, 118, 118, 0.3);*/
+       /*background-color: #868e96;*/
+       /*border-color: #868e96;*/
+       background-color: -internal-light-dark(rgba(116, 122, 129, 0.3), rgba(116, 122, 129, 0.3));
+       border-color: rgba(116, 122, 129, 0.3);
+   }
+
+   .log-out2{
+      margin-left: 30px;
+      font-size: 17px;
+      padding: 5px;
+   }
+
+   .pre-page{
+      margin-left: 30px;
+      font-size: 17px;
+      padding: 5px;
+   }
+
+   .save2{
+      margin-left: 30px;
+      font-size: 17px;
+      padding: 5px;
+   }
+
+   .baseframe{
+     margin-left: 50px;
+   }
+
+   .baseframe input[type=text]{
+     margin-top: 10px;
+     width: 200px;
+   }
+
+   .baseframe select{
+     margin-top: 10px;
+     width : 200px;
+   }
+
+   .baseframe button{
+     margin-left: 30px;
+     font-size: 17px;
+     padding: 5px;
+   }
+
+    .btn-secondary {
+        color: #2f2f2f;
+        background-color: #ffffff;
+        border-color: #767676;
+    }
+
+    .btn-secondary:hover {
+      color: #2f2f2f;
+      background-color: #ffffff;
+      border-color: #767676;
+    }
+
+    .btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+        background-color: #ffffff;
+        background-image: none;
+        border-color: #ffffff;
+        border: none;
+    }
+
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .2rem .45rem;
+        font-size: 13px;
+        line-height: 1.25;
+        border-radius: 0rem;
+        transition: all .0s ease-in-out;
+        margin: 0px;
+        /*padding: 5px;*/
+    }
+
+    .btn-secondary.focus, .btn-secondary:focus {
+        outline: -webkit-focus-ring-color auto 1px;
+        box-shadow: 0 0 0 2px rgb(85 89 94);
+    }
+
+    .scrollable-menu {
+        height: auto;
+        max-height: 300px;
+        overflow-x: hidden;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+        float: left;
+        min-width: 0rem;
+        padding: .2rem 0;
+        margin: .125rem 0 0;
+        font-size: 1rem;
+        color: #212529;
+        text-align: left;
+        list-style: none;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: .25rem;
+    }
+
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        /* padding: .25rem 1.5rem; */
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        white-space: nowrap;
+        background: 0 0;
+        /* border: 0; */
+    }
+
+    .my_dclass {
+        display: block;
+        width: 100%;
+        /* padding: .25rem 1.5rem; */
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        white-space: nowrap;
+        background: 0 0;
+        /* border: 0; */
+        font-size: 19px;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+     .dropdown-item:focus, .dropdown-item:hover {
+       color: #e02738;
+       text-decoration: none;
+       background-color: #a9adc5;
+     }
+    </style>
+  </head>
+  <body>
+
+
+        <div class="container contact contact-index">
+          <table class="top_table">
+            <tr>
+              <td><h2>LOT Info-Page</h2></td>
+              <td>&emsp;&emsp;&emsp;<button type="button" class="log-out2">&nbsp;로그아웃&nbsp;</button></td>
+            </tr>
+          </table>
+          <ul class="list-group">
+
+              <li class="list-group-item">
+                USER INFO : [&nbsp;&nbsp;<a href=""> <%=Name.recordset[0].name%> </a>&nbsp;&nbsp;]
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                <a href="javascript:void(0)" onclick="InspectionPage(<%=Name.recordset[0].id%>)">Inspection Page</a>
+              </li>
+
+          </ul>
+        </div>
+        <hr />
+        <div class="baseframe">
+            <span style="color:#e9ecef;"> LOT 이름</span><span style="color:#fa7217;"> * </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="lotNM" id="lotNM"  /> <!--autocomplete="off" />-->
+            <hr />
+            <span style="color:#e9ecef;"> START / END </span><span style="color:#fa7217;"> * </span>
+            <br />
+            <br />
+
+            <table id="menu_tb">
+              <tr>
+                <td style="color:#ffffff;border: none;margin: 0px;padding: 0px;">
+                        <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="se_sel"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="padding:3px;">
+                          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                        </button>
+                          <div class="dropdown-menu" aria-labelledby="se_sel">
+                            <table id="slct_se_sel">
+                              <tr>
+                                 <td id="slct_se_sel_0" tabindex="0" class="my_dclass dropdown-item"
+                                       onkeydown=  "dropdownSetting(se_sel,-1,'&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;',true,se_sel)"
+                                       onclick=    "dropdownSetting(se_sel,-1,'&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;',false,se_sel)">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</td>
+                                 <td id="slct_se_sel_1" tabindex="1" class="my_dclass dropdown-item"
+                                       onkeydown=  "dropdownSetting(se_sel,0,'&nbsp;&nbsp;&emsp;&emsp;&emsp;START&nbsp;&nbsp;&emsp;&emsp;&emsp;',true,se_sel)"
+                                       onclick=    "dropdownSetting(se_sel,0,'&nbsp;&nbsp;&emsp;&emsp;&emsp;START&nbsp;&nbsp;&emsp;&emsp;&emsp;',false,se_sel)">&nbsp;&emsp;&emsp;&emsp;START&nbsp;&emsp;&emsp;&emsp;</td>
+                                 <td id="slct_se_sel_2" tabindex="2" class="my_dclass dropdown-item"
+                                       onkeydown=  "dropdownSetting(se_sel,1,'&emsp;&emsp;&emsp;&emsp;END&emsp;&emsp;&emsp;&emsp;',true,se_sel)"
+                                       onclick=    "dropdownSetting(se_sel,1,'&emsp;&emsp;&emsp;&emsp;END&emsp;&emsp;&emsp;&emsp;',false,se_sel)">&emsp;&emsp;&emsp;&emsp;END&emsp;&emsp;&emsp;&emsp;</td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                </td>
+                <td style="color:#ffffff;border: none;margin: 0px;padding: 0px;">
+                        <button id="dpcnt" type="button" class="duplicate-check">&nbsp;중복검사&nbsp;</button>
+                </td>
+                <td style="color:#ffffff;border: none;margin: 0px;padding: 0px;">
+                        <button type="button" class="cancel-check">&nbsp;취소&nbsp;</button>
+                </td>
+              </tr>
+            </table>
+            <hr />
+
+            <span style="color:#e9ecef;"> 호기 </span><span style="color:#fa7217;"> * </span>
+            <br />
+            <br />
+                <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="hogi_sel"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                style="padding:3px;">
+                  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                </button>
+                  <div class="dropdown-menu scrollable-menu" aria-labelledby="hogi_sel">
+                    <table id="slct_hogi_sel">
+                    </table>
+                  </div>
+                </div>
+            <hr />
+
+            <span style="color:#e9ecef;"  > 품명 </span><span style="color:#fa7217;"> * </span>
+            <br />
+            <br />
+              <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="pumm_sel"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+              style="padding:3px;">
+                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+              </button>
+                <div class="dropdown-menu scrollable-menu" aria-labelledby="pumm_sel">
+                  <table id="slct_pumm_sel">
+                  </table>
+                </div>
+              </div>
+            <hr />
+
+            <span style="color:#e9ecef;"> 등록날짜 </span><span style="color:#fa7217;"> * </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="regiDT" id="regiDT"  readonly/> <!--autocomplete="off" />-->
+            <hr />
+
+            <span style="color:#e9ecef;"> 편광자폭 </span><span style="color:#fa7217;"> * </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="pyunM" id="pyunM" onKeydown='javascript:handlerNum(this)'/> <!--autocomplete="off" />-->
+            <hr />
+
+            <span style="color:#e9ecef;"> 검사M </span><span style="color:#fa7217;"> * </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="inspM" id="inspM" onKeydown='javascript:handlerNum(this)'/> <!--autocomplete="off" />-->
+            <hr />
+
+            <span style="color:#e9ecef;"> PPI/발행 </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="ppi_sel" id="ppi_sel" value=""/>
+            <hr />
+
+            <span style="color:#e9ecef;"> 검사자(名) </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="inspP1" id="inspP1" value=""/>
+            <input type="text" name="inspP2" id="inspP2" value=""/>
+            <input type="text" name="inspP3" id="inspP3" value=""/>
+            <hr />
+
+            <span style="color:#e9ecef;"> 엑셀(名) </span>
+            <br />
+            &emsp;&nbsp;&nbsp;
+            <input type="text" name="excelP" id="excelP" value=""/>
+            <hr />
+        </div>
+
+
+
+
+            <br />
+            <br />
+            &nbsp;&nbsp;
+            <input type="button" class="save2" id="save2" value="&nbsp;&nbsp;저&nbsp;장&nbsp;&nbsp;" /></td>
+            &emsp;&emsp;&emsp;
+            &emsp;&emsp;&emsp;
+            <button type="button" class="pre-page">&nbsp;이전페이지&nbsp;</button>
+            <hr />
+
+
+
+            <input id="user_id" type="hidden" value="<%=Name.recordset[0].id%>" />
+            <input id="user_name" type="hidden" value="<%=Name.recordset[0].name%>" />
+            <input id="selbox_record_id" type="hidden" value="" />
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+      </body>
+    </html>

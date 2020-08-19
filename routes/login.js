@@ -3,21 +3,28 @@ var router = express.Router();
 const { poolPromise } = require('../modules/contact');
 const sql = require('mssql');
 var TYPES = require('tedious').TYPES;
+const internalIp = require('internal-ip');
 
 
+
+//ACTION - 1
+//최초 로그인 페이지 시작시 해당 ROUTER 수행
 router.get('/',async function(req,res){
-  console.log('login page call');
+
+  console.log('logintheme page call');
   var    Logindata;
   try{
     const pool = await poolPromise;
     const result = await pool.request();
-    result.query('select * from insp_imployee', function (err, recordset) {
+    result.query('select * from insp_employee where delflag=1', async function (err, recordset) {
+        console.log('select * from insp_employee');
         var data = JSON.stringify(recordset);
 
         if (err){ console.log(err);}
         else{
           Logindata = JSON.parse(data);
-          res.render('main/login',{Logindata:Logindata});
+//          res.render('main/login',{Logindata:Logindata});
+            res.render('main/logintheme',{Logindata:Logindata});
         }
     });
   }catch(err){
@@ -29,20 +36,24 @@ router.get('/',async function(req,res){
 });
 
 
+
+//ACTION - 2
+//사용자가 로그인 버튼을 누룰시 해당 ROUTER 를 수행
 router.get('/loginid',async function(req,res,next) {
-    // console.log('router /login call~!');
+     console.log('router /loginid call~!');
 
       var userid = req.query.userid;
       var pw = req.query.pw;
-      console.log('router /login call~!  params ['+ userid + '/' + pw + ']');
+      //console.log('router /login call~!  params ['+ userid + '/' + pw + ']');
 
       var    Logindata;
       try{
         const pool = await poolPromise;
         const result = await pool.request();
-        var query = `select count(*) as cnt from insp_imployee where id=${userid} and pass='${pw}'`;
-        result.query(query, function (err, data) {
-            console.log(data);
+        var query = `select count(*) as cnt from insp_employee where delflag=1 and id=${userid} and pass='${pw}'`;
+        console.log(query);
+        result.query(query, async function (err, data) {
+            //console.log(data);
             //console.log(data.recordset[0].cnt);
 
 
@@ -59,7 +70,7 @@ router.get('/loginid',async function(req,res,next) {
               }
               else{
                 status={
-                  "id" : 999,
+                  "id" : userid,
                   "status" : '300',
                   "message" : 'login fail'
                 }

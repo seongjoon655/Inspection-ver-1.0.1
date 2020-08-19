@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="script.js" ></script>
+    <%- include('../partials/logintheme') %>
+
+
+
+      <!--===============================================================================================-->
+      	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+      <!--===============================================================================================-->
+      	<script src="vendor/animsition/js/animsition.min.js"></script>
+      <!--===============================================================================================-->
+      	<script src="vendor/bootstrap/js/popper.js"></script>
+      	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+      <!--===============================================================================================-->
+      	<script src="vendor/select2/select2.min.js"></script>
+      <!--===============================================================================================-->
+      	<script src="vendor/daterangepicker/moment.min.js"></script>
+      	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+      <!--===============================================================================================-->
+      	<script src="vendor/countdowntime/countdowntime.js"></script>
+      <!--===============================================================================================-->
+      	<script src="js/main.js"></script>
+      <style>
+          .pre-page{
+            margin-left: 30px;
+            font-size: 17px;
+            padding: 5px;
+          }
+
+          .btn-secondary {
+              line-height: 1.7;
+              color: #2f2f2f;
+              background-color: #ffffff;
+              border-color: #767676;
+          }
+
+          .btn-secondary:hover {
+            color: #2f2f2f;
+            background-color: #ffffff;
+            border-color: #767676;
+          }
+
+          .btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+              background-color: #ffffff;
+              background-image: none;
+              border-color: #ffffff;
+              border: none;
+          }
+
+          .btn {
+              display: inline-block;
+              font-weight: 400;
+              text-align: center;
+              white-space: nowrap;
+              vertical-align: middle;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+              border: 1px solid #d9d9d9;
+              /*padding: .2rem .45rem;*/
+              padding: 0rem 0rem;
+              font-size: 13px;
+              line-height: 2.5;
+              border-radius: 0rem;
+              transition: all .0s ease-in-out;
+              margin: 0px;
+              /*padding: 5px;*/
+          }
+
+          .btn-secondary.focus, .btn-secondary:focus {
+              outline: -webkit-focus-ring-color auto 1px;
+              box-shadow: 0 0 0 2px rgb(85 89 94);
+          }
+
+          .scrollable-menu {
+              height: auto;
+              max-height: 300px;
+              overflow-x: hidden;
+          }
+
+          .dropdown-menu {
+              position: absolute;
+              top: 100%;
+              left: 0;
+              z-index: 1000;
+              display: none;
+              float: left;
+              min-width: 0rem;
+              padding: .2rem 0;
+              margin: .125rem 0 0;
+              font-size: 1rem;
+              color: #212529;
+              text-align: left;
+              list-style: none;
+              background-color: #fff;
+              background-clip: padding-box;
+              border: 1px solid rgba(0,0,0,.15);
+              border-radius: .25rem;
+          }
+
+          .dropdown-menu.show {
+              display: block;
+              position: absolute !important;
+              transform: translate3d(0px, 40px, 0px) !important;
+              top: 0px !important;
+              left: 0px !important;
+              will-change: transform !important;
+          }
+
+          .dropdown-item {
+              display: block;
+              width: 100%;
+              /* padding: .25rem 1.5rem; */
+              clear: both;
+              font-weight: 400;
+              color: #212529;
+              text-align: inherit;
+              white-space: nowrap;
+              background: 0 0;
+              /* border: 0; */
+          }
+
+          .my_dclass {
+              display: block;
+              width: 100%;
+              /* padding: .25rem 1.5rem; */
+              clear: both;
+              font-weight: 400;
+              color: #212529;
+              text-align: inherit;
+              white-space: nowrap;
+              background: 0 0;
+              /* border: 0; */
+              font-size: 19px;
+              text-align: center;
+              padding-left: 30px;
+              padding-right: 30px;
+              /*padding-top: 20px;*/
+              /*padding-bottom: 20px;*/
+          }
+
+           .dropdown-item:focus, .dropdown-item:hover {
+             color: #e02738;
+             text-decoration: none;
+             background-color: #a9adc5;
+           }
+
+           .btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+               background-color: #ffffff;
+               background-image: none;
+               border-color: #d9d9d9;
+               border: solid 1px #d9d9d9;
+           }
+
+           .form-control:focus {
+               color: #495057;
+               background-color: #fff;
+               /*border-color: #80bdff;*/
+               outline: 0;
+               border: 1px solid rgb(217 217 217); !important;
+           }
+
+           textarea:focus, input:focus {
+                /*border-color: 1px solid rgb(217 217 217) !important;*/
+                border-color: rgb(217 217 217) !important;
+            }
+
+            /*
+           .pwcontrol:focus, .pwcontrol:hover {
+             style="border: 1px solid rgb(217 217 217); !important"
+           }
+           */
+
+      </style>
+  </head>
+  <body >
+
+  	<div class="limiter">
+  		<div class="container-login100">
+  			<div class="wrap-login100">
+  				<form class="login100-form validate-form">
+  					<span class="login100-form-title p-b-26">
+  					<h2>	Inspectoin Login </h2>
+  					</span>
+  					&emsp;&emsp;&emsp;생산2팀
+  					<div class="text-center p-t-115">
+  					</div>
+  					<div class="text-center p-t-115">
+  					</div>
+
+  					<div class="btn-group">
+  												<label class="btn-label">USER</label>
+  												<div class="dropdown">
+  													<select style="display:none" class="btn btn-light btn-outline-secondary dropdown-toggle" id="slct11" >
+  														<option value="-1" align="center">&emsp;&emsp;----&emsp;&emsp;</option>
+
+                              <% if(Logindata.recordset.length){
+                                    for(var i=0; i<Logindata.recordset.length; i++){
+                               %>
+                           	      <option value="<%= Logindata.recordset[i].id %>" align="center">&emsp;&emsp;<%= Logindata.recordset[i].name %>&emsp;&emsp;</option>
+                           	      <%}
+                              }%>
+
+  													</select>
+<!--style="padding:3px;"-->
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="slct1"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            style="padding:3px;"
+                            >
+                              &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                            </button>
+                              <div class="dropdown-menu scrollable-menu" aria-labelledby="slct1"
+                              >
+                                <table id="slct_user">
+                                  <td id="slct_user_0" tabindex="0" class="my_dclass dropdown-item"
+                                        onkeydown=  "loginSetting(slct1,-1,'&emsp;&emsp;&emsp;&emsp;&emsp;',true,pass)"
+                                        onclick=    "loginSetting(slct1,-1,'&emsp;&emsp;&emsp;&emsp;&emsp;',false,pass)">&emsp;&emsp;&emsp;&emsp;</td>
+                                  <% if(Logindata.recordset.length){
+                                        for(var i=0; i<Logindata.recordset.length; i++){
+                                   %>
+                                   <td id="slct_user_<%=i%>" tabindex="<%=i%>" class="my_dclass dropdown-item"
+                                         onkeydown=  "loginSetting(slct1,'<%= Logindata.recordset[i].id %>','<%= Logindata.recordset[i].name %>',true,pass)"
+                                         onclick=    "loginSetting(slct1,'<%= Logindata.recordset[i].id %>','<%= Logindata.recordset[i].name %>',false,pass)"><%= Logindata.recordset[i].name %></td>
+                               	      <%}
+                                  }%>
+                                </table>
+                              </div>
+  												</div>
+            </div>
+  					<br />
+
+<!--
+  					<div class="wrap-input100 validate-input" data-validate="enter your password">
+  						<span class="btn-show-pass">
+  							<i class="zmdi zmdi-eye"></i>
+  						</span>
+  						<input class="input100" type="password" id="pass" name="pass">
+  						<span class="focus-input100" data-placeholder="PASSWORD"></span>
+  					</div>
+-->
+            <div>
+              <label class="btn-label">PASSWORD </label>
+              <input class="pwcontrol form-control" type="text" id="pass" />
+            </div>
+            <br />
+
+  					<div class="container-login100-form-btn">
+  						<div class="wrap-login100-form-btn">
+  							<div class="login100-form-bgbtn"></div>
+  							<button class="login100-form-btn">
+  								Login
+  							</button>
+
+  						</div>
+  					</div>
+  					<div class="text-center p-t-115">
+  						<span class="txt1">
+
+  						</span>
+
+  						<a class="txt2" href="#">
+
+  						</a>
+  					</div>
+  				</form>
+  			</div>
+  		</div>
+  	</div>
+
+
+  	<div id="dropDownSelect1"></div>
+
+
+
+
+
+  </body>
+</html>

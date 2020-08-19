@@ -10,6 +10,7 @@ const sql = require('mssql');
 var TYPES = require('tedious').TYPES;
 
 
+
 // Other settings
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/"));
@@ -18,33 +19,15 @@ app.use(bodyParser.json({extended:true}));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 
+
 //router 사용
+//login 페이지
 app.use('/login', require('./routes/login'));
+//lot 검사 페이지
 app.use('/', require('./routes/home'));
+//lot 정보 입력
+app.use('/initlot', require('./routes/initlot'));
 
-//app.get('/loginid', require('./routes/home'));
-
-//AJAX GET METHOD
-/*app.get('/loginid',function(req,res) {
-
-    console.log('call app.get');
-    var userid = req.query.userid;
-    var pw = req.query.pw;
-
-    console.log('GET Parameter = ' + userid + '/' + pw);
-
-    var result = userid;
-
-    //console.log(result );
-
-
-
-    //res.send('./routes/home');
-    res.send({result : result});
-    //res.render('main/index',null);
-});
-*/
-//app.use('/send', require('./routes/home'));
 
 var server = app.listen(8001, function () {
     console.log('Server is running..');
